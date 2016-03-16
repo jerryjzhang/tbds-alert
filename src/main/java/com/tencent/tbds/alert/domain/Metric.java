@@ -8,7 +8,7 @@ public class Metric {
     private String name;
     private String alias;
     private String desc;
-    private MetricUnit unit;
+    private MetricUnit unit = MetricUnit.COUNT;
 
     public Metric(String appId, String name) {
         this.appId = appId;
