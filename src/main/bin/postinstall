@@ -1,0 +1,5 @@
+#!/bin/bash
+
+ln -s /usr/local/tbds-alert/bin/tbds-alert /sbin/tbds-alert
+
+

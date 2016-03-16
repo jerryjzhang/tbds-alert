@@ -1,0 +1,52 @@
+#!/usr/bin/env bash
+
+binDir=/usr/local/tbds-alert/bin
+baseDir=$(readlink -f $binDir/../)
+confDir=$baseDir/conf
+
+function start()
+{
+  pid=$(ps aux | grep AlertMain | grep -v grep | awk '{print $2}')
+  if [[ "$pid" == "" ]]; then
+    log=$baseDir/log/application.log
+    env DEPLOY=true $binDir/run.sh && echo "Process started, see log/error with log/error command"
+    return 0
+  else
+    echo "Process (PID = $pid) is running."
+    return 1
+  fi
+}
+
+function stop()
+{
+  pid=$(ps aux | grep AlertMain | grep -v grep | awk '{print $2}')
+  if [[ "$pid" == "" ]]; then
+    echo "Process is not running !"
+    return 1
+  else
+    kill -15 $pid
+    echo "Process (PID = $pid) is killed !"
+    return 0
+  fi
+}
+
+case "$1" in
+  start)
+        echo -e "Starting tbds-alert"
+        start
+        ;;
+  stop)
+        echo -e "Stopping tbds-alert"
+        stop
+        ;;
+  restart)
+        echo -e "Resetting tbds-alert"
+        stop
+        start
+        ;;
+  *)
+        echo "Use command {start|stop|status|restart} to run."
+        exit 1
+esac
+
+exit 0
