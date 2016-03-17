@@ -4,6 +4,7 @@ binDir=$(cd "$(dirname "$0")"; pwd)
 baseDir=$(readlink -f $binDir/../)
 libDir=$baseDir/lib
 confDir=$baseDir/conf
+webDir=$baseDir/webapp
 
 CLASSPATH=""
 for jarPath in $libDir/*.jar; do
@@ -12,7 +13,7 @@ done
 
 CLASSPATH=$CLASSPATH:$confDir
 CLASSPATH=$CLASSPATH:$webDir
-CLASSPATH=$CLASSPATH:$deployDir
+
 export CLASSPATH
 export LANG="zh_CN.UTF-8"
 

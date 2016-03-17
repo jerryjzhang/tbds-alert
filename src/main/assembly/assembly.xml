@@ -38,5 +38,11 @@
       <excludes>
       </excludes>
     </fileSet>
+    <fileSet>
+      <outputDirectory>/webapp</outputDirectory>
+      <directory>src/main/webapp</directory>
+      <directoryMode>0755</directoryMode>
+      <fileMode>0644</fileMode>
+    </fileSet>
   </fileSets>
 </assembly>

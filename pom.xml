@@ -143,6 +143,15 @@
                         </mapping>
 
                         <mapping>
+                            <directory>${install-path}/webapp</directory>
+                            <sources>
+                                <source>
+                                    <location>src/main/webapp</location>
+                                </source>
+                            </sources>
+                        </mapping>
+
+                        <mapping>
                             <directory>${install-path}/bin</directory>
                             <filemode>755</filemode>
                             <sources>
