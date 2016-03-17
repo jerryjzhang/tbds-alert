@@ -21,6 +21,7 @@ public class MetricService {
     private Set<String> appIds = new HashSet<>();
     private List<Metric> metrics = new ArrayList<>();
     private Map<String, List<Metric>> appId2metric = new HashMap<>();
+    private Map<String, Metric> name2metric = new HashMap<>();
 
     @PostConstruct
     public void initialize() {
@@ -36,6 +37,7 @@ public class MetricService {
                 }
                 Metric metric = new Metric(items[0], items[1]);
                 appId2metric.get(items[0]).add(metric);
+                name2metric.put(items[0] + items[1], metric);
                 metrics.add(metric);
             }
             LOG.debug("Successfully read out metrics info from file {}", METRICS_INFO_FILE);
@@ -54,5 +56,9 @@ public class MetricService {
 
     public List<Metric> getMetricByAppId(String appId){
         return appId2metric.get(appId);
+    }
+
+    public Metric getMetric(String appId, String name){
+        return name2metric.get(appId + name);
     }
 }

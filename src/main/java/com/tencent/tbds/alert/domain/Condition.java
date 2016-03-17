@@ -1,21 +1,61 @@
 package com.tencent.tbds.alert.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.GenericGenerator;
+
+import javax.persistence.*;
+import java.util.List;
+
 /**
  * Created by jerryjzhang on 2016/3/16.
  */
+@Entity
+@Table(name = "condition")
 public class Condition {
-    private Metric metric;
-    private ConditionRelation relation;
-    private Double threshold;
-    private int period;
-    private Statistic statistic;
+    @Id
+    @Column(length = 36)
+    @GenericGenerator(name = "system-uuid", strategy = "uuid2")
+    @GeneratedValue(generator = "system-uuid")
+    private String id;
+    private String metricName;
 
-    public Metric getMetric() {
-        return metric;
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.REFRESH}, optional = false)
+    @JoinColumn(name = "alert")
+    @JsonIgnore
+    private Alert alert;
+
+    @Column(length = 5)
+    private ConditionRelation relation;
+
+    private Double threshold;
+
+    private int period;
+
+    @Column(length = 20)
+    private Statistic statistic = Statistic.Maximum;
+
+    public String getId() {
+        return id;
     }
 
-    public void setMetric(Metric metric) {
-        this.metric = metric;
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public Alert getAlert() {
+        return alert;
+    }
+
+    public void setAlert(Alert alert) {
+        this.alert = alert;
+    }
+
+    public String getMetricName() {
+        return metricName;
+    }
+
+    public void setMetricName(String metricName) {
+        this.metricName = metricName;
     }
 
     public ConditionRelation getRelation() {

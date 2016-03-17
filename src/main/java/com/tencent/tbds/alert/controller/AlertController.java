@@ -1,13 +1,32 @@
 package com.tencent.tbds.alert.controller;
 
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.tencent.tbds.alert.domain.Alert;
+import com.tencent.tbds.alert.dto.GetAlertsResult;
+import com.tencent.tbds.alert.service.AlertService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * Created by jerryjzhang on 2016/3/16.
  */
 @RestController
-@RequestMapping(value="/alert")
+@RequestMapping(value="/alerts")
 public class AlertController {
+    @Autowired
+    private AlertService alertService;
 
+    @RequestMapping(method= RequestMethod.POST)
+    public void saveAlert(@RequestBody Alert alert){
+        alertService.saveAlert(alert);
+    }
+
+    @RequestMapping(method= RequestMethod.GET)
+    public GetAlertsResult getAlerts(){
+        return new GetAlertsResult(alertService.getAlerts());
+    }
+
+    @RequestMapping(value="/{alertId}" ,method= RequestMethod.DELETE)
+    public void deleteAlert(@PathVariable String alertId){
+        alertService.deleteAlert(alertId);
+    }
 }
