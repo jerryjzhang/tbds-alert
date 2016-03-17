@@ -11,15 +11,16 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class MetricService {
     private static final Logger LOG = LoggerFactory.getLogger(MetricService.class);
 
     private static final String METRICS_INFO_FILE = "metrics-info";
+    private Set<String> appIds = new HashSet<>();
     private List<Metric> metrics = new ArrayList<>();
+    private Map<String, List<Metric>> appId2metric = new HashMap<>();
 
     @PostConstruct
     public void initialize() {
@@ -29,7 +30,13 @@ public class MetricService {
             String line;
             while((line = in.readLine()) != null) {
                 String [] items = line.split("\t");
-                metrics.add(new Metric(items[0], items[1]));
+                appIds.add(items[0]);
+                if(appId2metric.get(items[0]) == null){
+                    appId2metric.put(items[0], new ArrayList<Metric>());
+                }
+                Metric metric = new Metric(items[0], items[1]);
+                appId2metric.get(items[0]).add(metric);
+                metrics.add(metric);
             }
             LOG.debug("Successfully read out metrics info from file {}", METRICS_INFO_FILE);
         }catch(IOException e){
@@ -37,7 +44,15 @@ public class MetricService {
         }
     }
 
+    public Set<String> getMetricAppIds(){
+        return this.appIds;
+    }
+
     public List<Metric> getMetrics(){
         return metrics;
+    }
+
+    public List<Metric> getMetricByAppId(String appId){
+        return appId2metric.get(appId);
     }
 }

@@ -10,6 +10,7 @@ import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by jerryjzhang on 2016/3/16.
@@ -21,8 +22,8 @@ public class TestMetricService {
     private MetricService metricService;
 
     @Test
-    public void testGetMetrics() {
-        List<Metric> metrics = metricService.getMetrics();
+    public void testGetMetricAppIds() {
+        Set<String> metrics = metricService.getMetricAppIds();
         assertTrue(metrics.size() > 0);
     }
 }

@@ -1,8 +1,10 @@
 package com.tencent.tbds.alert.controller;
 
+import com.tencent.tbds.alert.dto.GetMetricAppIdsResult;
 import com.tencent.tbds.alert.dto.GetMetricsResult;
 import com.tencent.tbds.alert.service.MetricService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,8 +23,19 @@ public class MetricController {
         return "hello world";
     }
 
-    @RequestMapping(method= RequestMethod.GET)
+    @RequestMapping(value="/appids", method= RequestMethod.GET)
+    public GetMetricAppIdsResult getMetricAppIds(){
+        return new GetMetricAppIdsResult(metricService.getMetricAppIds());
+    }
+
+    @RequestMapping(value="/{appid}", method= RequestMethod.GET)
+    public GetMetricsResult getMetrcsByAppid(@PathVariable String appid){
+        return new GetMetricsResult(metricService.getMetricByAppId(appid));
+    }
+
+    @RequestMapping(method=RequestMethod.GET)
     public GetMetricsResult getMetrics(){
         return new GetMetricsResult(metricService.getMetrics());
     }
+
 }
