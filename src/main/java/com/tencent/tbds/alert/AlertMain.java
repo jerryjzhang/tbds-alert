@@ -5,11 +5,11 @@ import org.springframework.boot.autoconfigure.*;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.context.web.SpringBootServletInitializer;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
-@EnableAutoConfiguration
+@SpringBootApplication
 @ComponentScan
-@Configuration
+@EnableSwagger2
 public class AlertMain extends SpringBootServletInitializer {
 
     @Override

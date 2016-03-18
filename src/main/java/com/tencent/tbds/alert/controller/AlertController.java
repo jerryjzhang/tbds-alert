@@ -16,8 +16,9 @@ public class AlertController {
     private AlertService alertService;
 
     @RequestMapping(method= RequestMethod.POST)
-    public void saveAlert(@RequestBody Alert alert){
+    public String saveAlert(@RequestBody Alert alert){
         alertService.saveAlert(alert);
+        return alert.getId();
     }
 
     @RequestMapping(method= RequestMethod.GET)

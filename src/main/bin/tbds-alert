@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-binDir=/usr/local/tbds-alert/bin
+binDir=$(cd "$(dirname "$0")"; pwd)
 baseDir=$(readlink -f $binDir/../)
 confDir=$baseDir/conf
 
@@ -8,8 +8,8 @@ function start()
 {
   pid=$(ps aux | grep AlertMain | grep -v grep | awk '{print $2}')
   if [[ "$pid" == "" ]]; then
-    log=$baseDir/log/application.log
-    env DEPLOY=true $binDir/run.sh && echo "Process started, see log/error with log/error command"
+    log=$baseDir/log/tbds-alert.log
+    env DEPLOY=true $baseDir/bin/run.sh && echo "Process started, see log/error with log/error command"
     return 0
   else
     echo "Process (PID = $pid) is running."

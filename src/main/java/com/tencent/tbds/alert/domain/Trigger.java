@@ -1,5 +1,6 @@
 package com.tencent.tbds.alert.domain;
 
+import io.swagger.annotations.ApiModelProperty;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -17,6 +18,7 @@ public class Trigger {
     @GeneratedValue(generator = "system-uuid")
     private String id;
     private String alertId;
+    @ApiModelProperty(dataType = "java.lang.Long")
     private Timestamp time;
 
     public String getAlertId() {

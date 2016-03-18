@@ -4,9 +4,11 @@ import com.tencent.tbds.alert.dao.AlertRepository;
 import com.tencent.tbds.alert.domain.Alert;
 import com.tencent.tbds.alert.domain.Condition;
 import com.tencent.tbds.alert.domain.Notification;
+import com.tencent.tbds.alert.utils.AlertUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 /**
@@ -18,12 +20,10 @@ public class AlertService {
     private AlertRepository alertRepository;
 
     public void saveAlert(Alert alert){
-        for(Condition cond : alert.getConditions()){
-            cond.setAlert(alert);
-        }
         for(Notification notif : alert.getNotifications()){
             notif.setAlert(alert);
         }
+        alert.setLastUpdateTime(AlertUtils.now());
         alertRepository.save(alert);
     }
 

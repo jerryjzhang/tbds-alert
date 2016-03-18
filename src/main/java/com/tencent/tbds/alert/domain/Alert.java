@@ -1,5 +1,6 @@
 package com.tencent.tbds.alert.domain;
 
+import io.swagger.annotations.ApiModelProperty;
 import org.hibernate.annotations.GenericGenerator;
 
 import java.sql.Timestamp;
@@ -17,18 +18,24 @@ public class Alert {
     @GenericGenerator(name = "system-uuid", strategy = "uuid2")
     @GeneratedValue(generator = "system-uuid")
     private String id;
-
     private String name;
     private String desc;
     private String lastUpdateBy;
+    private int interval;
+
+    @ApiModelProperty(dataType = "java.lang.Long")
     private Timestamp lastUpdateTime;
+
+    @ApiModelProperty(dataType = "java.lang.Long")
     private Timestamp lastTriggerTime;
 
-    @OneToMany(mappedBy = "alert", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private List<Condition> conditions;
+    @OneToOne(cascade = CascadeType.ALL)
+    private Condition condition;
 
     @OneToMany(mappedBy = "alert", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Notification> notifications;
+
+    private boolean enabled;
 
     public String getId() {
         return id;
@@ -78,12 +85,20 @@ public class Alert {
         this.lastTriggerTime = lastTriggerTime;
     }
 
-    public List<Condition> getConditions() {
-        return conditions;
+    public Condition getCondition() {
+        return condition;
     }
 
-    public void setConditions(List<Condition> conditions) {
-        this.conditions = conditions;
+    public void setCondition(Condition condition) {
+        this.condition = condition;
+    }
+
+    public int getInterval() {
+        return interval;
+    }
+
+    public void setInterval(int interval) {
+        this.interval = interval;
     }
 
     public List<Notification> getNotifications() {
@@ -92,5 +107,13 @@ public class Alert {
 
     public void setNotifications(List<Notification> notifications) {
         this.notifications = notifications;
+    }
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
     }
 }

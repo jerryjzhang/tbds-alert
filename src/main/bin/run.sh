@@ -29,7 +29,7 @@ command="-Dfile.encoding="UTF-8" -Dorg.eclipse.jetty.util.URI.charset="UTF-8" -D
 is_test=$TEST
 mkdir -p $baseDir/log
 if [[ "$is_test" == "true" ]]; then
-  java -Dspring.profiles.active="test" $command >/dev/null 2>$baseDir/log/error.log &
+  java -Dspring.profiles.active="dev" $command >/dev/null 2>$baseDir/log/error.log &
 else
   java $command >/dev/null 2>$baseDir/log/error.log &
   # java -agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=8080 $command

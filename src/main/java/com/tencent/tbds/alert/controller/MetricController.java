@@ -18,11 +18,6 @@ public class MetricController {
     @Autowired
     private MetricService metricService;
 
-    @RequestMapping(value="/test", method= RequestMethod.GET)
-    public String test() {
-        return "hello world";
-    }
-
     @RequestMapping(value="/appids", method= RequestMethod.GET)
     public GetMetricAppIdsResult getMetricAppIds(){
         return new GetMetricAppIdsResult(metricService.getMetricAppIds());

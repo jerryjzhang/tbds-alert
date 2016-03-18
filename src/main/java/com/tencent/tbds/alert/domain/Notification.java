@@ -1,6 +1,7 @@
 package com.tencent.tbds.alert.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import io.swagger.annotations.ApiModelProperty;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -32,6 +33,7 @@ public class Notification {
 
     @Column(length = 10)
     private NotificationType type = NotificationType.PORTAL;
+    @ApiModelProperty(dataType = "java.lang.Long")
     private Timestamp time;
 
     public String getId() {

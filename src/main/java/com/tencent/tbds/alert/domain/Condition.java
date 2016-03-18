@@ -19,8 +19,7 @@ public class Condition {
     private String id;
     private String metricName;
 
-    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.REFRESH}, optional = false)
-    @JoinColumn(name = "alert")
+    @OneToOne
     @JsonIgnore
     private Alert alert;
 
