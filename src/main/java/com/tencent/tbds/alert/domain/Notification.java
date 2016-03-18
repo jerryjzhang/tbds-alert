@@ -15,9 +15,10 @@ import java.sql.Timestamp;
 public class Notification {
     public enum NotificationType {
         PORTAL,
-        HTTP,
+        API,
         SMS,
         EMAIL,
+        WEICHAT
     }
 
     @Id

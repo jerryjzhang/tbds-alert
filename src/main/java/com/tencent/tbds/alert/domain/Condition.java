@@ -17,6 +17,7 @@ public class Condition {
     @GenericGenerator(name = "system-uuid", strategy = "uuid2")
     @GeneratedValue(generator = "system-uuid")
     private String id;
+    private String appId;
     private String metricName;
 
     @OneToOne
@@ -47,6 +48,14 @@ public class Condition {
 
     public void setAlert(Alert alert) {
         this.alert = alert;
+    }
+
+    public String getAppId() {
+        return appId;
+    }
+
+    public void setAppId(String appId) {
+        this.appId = appId;
     }
 
     public String getMetricName() {

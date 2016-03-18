@@ -20,6 +20,7 @@ public class Trigger {
     private String alertId;
     @ApiModelProperty(dataType = "java.lang.Long")
     private Timestamp time;
+    private String cause;
 
     public String getAlertId() {
         return alertId;
@@ -43,5 +44,13 @@ public class Trigger {
 
     public void setTime(Timestamp time) {
         this.time = time;
+    }
+
+    public String getCause() {
+        return cause;
+    }
+
+    public void setCause(String cause) {
+        this.cause = cause;
     }
 }

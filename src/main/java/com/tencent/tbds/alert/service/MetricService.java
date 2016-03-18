@@ -5,6 +5,7 @@ package com.tencent.tbds.alert.service;
  */
 
 import com.tencent.tbds.alert.domain.Metric;
+import com.tencent.tbds.alert.domain.Statistic;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -60,5 +61,9 @@ public class MetricService {
 
     public Metric getMetric(String appId, String name){
         return name2metric.get(appId + name);
+    }
+
+    public Double getMetricValue(String appId, String metricName, int period, Statistic statistic){
+        return 80.0;
     }
 }
