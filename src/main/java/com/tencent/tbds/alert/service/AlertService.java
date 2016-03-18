@@ -49,7 +49,7 @@ public class AlertService {
         }
         alertRepository.save(alert);
         ScheduledFuture task = scheduler.scheduleAtFixedRate(
-                new AlertMonitorTask(alert), 0, alert.getCondition().getPeriod(), TimeUnit.MINUTES);
+                new AlertMonitorTask(alert), alert.getCondition().getPeriod(), alert.getCondition().getPeriod(), TimeUnit.MINUTES);
         scheduledTasks.put(alert.getId(), task);
         LOG.info("Scheduled alert monitoring task for alert id={}, name={}", alert.getId(), alert.getName());
     }

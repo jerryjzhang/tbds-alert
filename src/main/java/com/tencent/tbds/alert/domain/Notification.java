@@ -25,6 +25,7 @@ public class Notification {
     @Column(length = 36)
     @GenericGenerator(name = "system-uuid", strategy = "uuid2")
     @GeneratedValue(generator = "system-uuid")
+    @ApiModelProperty(notes = "告警通知ID，新建告警不需要填写")
     private String id;
 
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.REFRESH}, optional = false)
@@ -33,9 +34,11 @@ public class Notification {
     private Alert alert;
 
     @Column(length = 10)
+    @ApiModelProperty(notes = "通知推送渠道")
     private NotificationType type = NotificationType.PORTAL;
-    @ApiModelProperty(dataType = "java.lang.Long")
-    private Timestamp time;
+
+    @ApiModelProperty(dataType = "java.lang.Long", notes = "上次通知推送时间")
+    private Timestamp lastPushTime;
 
     public String getId() {
         return id;
@@ -61,11 +64,11 @@ public class Notification {
         this.type = type;
     }
 
-    public Timestamp getTime() {
-        return time;
+    public Timestamp getLastPushTime() {
+        return lastPushTime;
     }
 
-    public void setTime(Timestamp time) {
-        this.time = time;
+    public void setLastPushTime(Timestamp lastPushTime) {
+        this.lastPushTime = lastPushTime;
     }
 }

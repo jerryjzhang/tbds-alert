@@ -1,6 +1,7 @@
 package com.tencent.tbds.alert.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import io.swagger.annotations.ApiModelProperty;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -16,8 +17,13 @@ public class Condition {
     @Column(length = 36)
     @GenericGenerator(name = "system-uuid", strategy = "uuid2")
     @GeneratedValue(generator = "system-uuid")
+    @ApiModelProperty(notes = "告警触发条件ID，新建告警不需要填写")
     private String id;
+
+    @ApiModelProperty(notes = "告警指标的类别", required = true)
     private String appId;
+
+    @ApiModelProperty(notes = "告警指标的名称", required = true)
     private String metricName;
 
     @OneToOne
@@ -25,13 +31,17 @@ public class Condition {
     private Alert alert;
 
     @Column(length = 5)
+    @ApiModelProperty(notes = "告警阈值与指标值的比较关系")
     private ConditionRelation relation;
 
+    @ApiModelProperty(notes = "告警阈值")
     private Double threshold;
 
+    @ApiModelProperty(notes = "告警探测周期")
     private int period;
 
     @Column(length = 20)
+    @ApiModelProperty(notes = "告警指标值统计类型")
     private Statistic statistic = Statistic.Maximum;
 
     public String getId() {

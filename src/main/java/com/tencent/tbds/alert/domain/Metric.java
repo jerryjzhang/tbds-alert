@@ -1,13 +1,20 @@
 package com.tencent.tbds.alert.domain;
 
+import io.swagger.annotations.ApiModelProperty;
+
 /**
  * Created by jerryjzhang on 2016/3/15.
  */
 public class Metric {
+    @ApiModelProperty(notes = "告警指标的类别")
     private String appId;
+    @ApiModelProperty(notes = "告警指标的名称")
     private String name;
+    @ApiModelProperty(notes = "告警指标的别名")
     private String alias;
+    @ApiModelProperty(notes = "告警指标的描述")
     private String desc;
+    @ApiModelProperty(notes = "告警指标值单位")
     private MetricUnit unit = MetricUnit.COUNT;
 
     public Metric(String appId, String name) {
