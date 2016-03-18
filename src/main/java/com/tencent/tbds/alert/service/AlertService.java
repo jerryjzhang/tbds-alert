@@ -31,6 +31,10 @@ public class AlertService {
         return alertRepository.findAll();
     }
 
+    public Alert getAlert(String alertId){
+        return alertRepository.findOne(alertId);
+    }
+
     public void deleteAlert(String alertId){
         alertRepository.delete(alertId);
     }
