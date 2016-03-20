@@ -3,8 +3,11 @@ package com.tencent.tbds.alert.controller;
 import com.tencent.tbds.alert.domain.Alert;
 import com.tencent.tbds.alert.dto.GetAlertsResult;
 import com.tencent.tbds.alert.service.AlertService;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -24,9 +27,13 @@ public class AlertController {
     }
 
     @RequestMapping(method= RequestMethod.GET)
-    @ApiOperation(value = "获取所有的告警", notes = "get all alerts")
-    public GetAlertsResult getAlerts(){
-        return new GetAlertsResult(alertService.getAlerts());
+    @ApiOperation(value = "获取所有的告警，有分页机制", notes = "get all alerts")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "pageSize", value = "每页的大小", paramType = "query", dataType = "int"),
+            @ApiImplicitParam(name = "pageNumber", value = "第几页", paramType = "query", dataType = "int"),
+    })
+    public GetAlertsResult getAlerts(Pageable pageable){
+        return new GetAlertsResult(alertService.getAlerts(pageable));
     }
 
     @RequestMapping(value="/{alertId}", method= RequestMethod.GET)

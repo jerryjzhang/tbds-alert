@@ -1,6 +1,7 @@
 package com.tencent.tbds.alert.dto;
 
 import com.tencent.tbds.alert.domain.Alert;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -8,17 +9,17 @@ import java.util.List;
  * Created by jerryjzhang on 2016/3/17.
  */
 public class GetAlertsResult {
-    List<Alert> alerts;
+    Page<Alert> alerts;
 
-    public GetAlertsResult(List<Alert> alerts) {
+    public GetAlertsResult(Page<Alert> alerts) {
         this.alerts = alerts;
     }
 
-    public List<Alert> getAlerts() {
+    public Page<Alert> getAlerts() {
         return alerts;
     }
 
-    public void setAlerts(List<Alert> alerts) {
+    public void setAlerts(Page<Alert> alerts) {
         this.alerts = alerts;
     }
 }

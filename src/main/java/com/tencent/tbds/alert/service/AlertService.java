@@ -7,10 +7,11 @@ import com.tencent.tbds.alert.utils.AlertUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
-import java.util.List;
 import java.util.concurrent.*;
 
 /**
@@ -54,8 +55,8 @@ public class AlertService {
         LOG.info("Scheduled alert monitoring task for alert id={}, name={}", alert.getId(), alert.getName());
     }
 
-    public List<Alert> getAlerts(){
-        return alertRepository.findAll();
+    public Page<Alert> getAlerts(Pageable pageable){
+        return alertRepository.findAll(pageable);
     }
 
     public Alert getAlert(String alertId){
