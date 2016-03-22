@@ -4,6 +4,7 @@ import io.swagger.annotations.ApiModelProperty;
 import org.hibernate.annotations.GenericGenerator;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.*;
 
@@ -32,8 +33,11 @@ public class Alert {
     @ApiModelProperty(notes = "告警频率/间隔", required = true)
     private int interval;
 
-    @ApiModelProperty(dataType = "java.lang.Long", notes = "新创建的告警不需要填写")
+    @ApiModelProperty(dataType = "java.lang.Long", notes = "告警最后修改时间，新创建的告警不需要填写")
     private Timestamp lastUpdateTime;
+
+    @ApiModelProperty(dataType = "java.lang.Long", notes = "告警最后触发时间，新创建的告警不需要填写")
+    private Timestamp lastTriggerTime;
 
     @OneToOne(cascade = CascadeType.ALL)
     @ApiModelProperty(notes = "告警触发条件", required = true)
@@ -41,10 +45,13 @@ public class Alert {
 
     @OneToMany(mappedBy = "alert", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @ApiModelProperty(notes = "告警通知对象")
-    private List<Notification> notifications;
+    private List<Notification> notifications = new ArrayList<>();
 
     @ApiModelProperty(notes = "是否开启告警")
-    private boolean enabled;
+    private boolean enabled = true;
+
+    @ApiModelProperty(notes = "当前状态")
+    private AlertState state = AlertState.Normal;
 
     public String getId() {
         return id;
@@ -86,6 +93,14 @@ public class Alert {
         this.lastUpdateTime = lastUpdateTime;
     }
 
+    public Timestamp getLastTriggerTime() {
+        return lastTriggerTime;
+    }
+
+    public void setLastTriggerTime(Timestamp lastTriggerTime) {
+        this.lastTriggerTime = lastTriggerTime;
+    }
+
     public Condition getCondition() {
         return condition;
     }
@@ -116,5 +131,18 @@ public class Alert {
 
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
+    }
+
+    public AlertState getState() {
+        return state;
+    }
+
+    public void setState(AlertState state) {
+        this.state = state;
+    }
+
+    public enum AlertState {
+        Normal,
+        Abnormal
     }
 }

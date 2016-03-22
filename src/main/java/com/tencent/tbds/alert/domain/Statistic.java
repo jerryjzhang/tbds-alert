@@ -4,12 +4,10 @@ package com.tencent.tbds.alert.domain;
  * Created by jerryjzhang on 2016/3/16.
  */
 public enum Statistic {
-
-    SampleCount("SampleCount"),
-    Average("Average"),
+    Average("Mean"),
     Sum("Sum"),
-    Minimum("Minimum"),
-    Maximum("Maximum");
+    Minimum("Min"),
+    Maximum("Max");
 
     private String value;
 
@@ -32,15 +30,13 @@ public enum Statistic {
     public static Statistic fromValue(String value) {
         if (value == null || "".equals(value)) {
             throw new IllegalArgumentException("Value cannot be null or empty!");
-        } else if ("SampleCount".equals(value)) {
-            return SampleCount;
-        } else if ("Average".equals(value)) {
+        } else if ("Mean".equals(value)) {
             return Average;
         } else if ("Sum".equals(value)) {
             return Sum;
-        } else if ("Minimum".equals(value)) {
+        } else if ("Min".equals(value)) {
             return Minimum;
-        } else if ("Maximum".equals(value)) {
+        } else if ("Max".equals(value)) {
             return Maximum;
         } else {
             throw new IllegalArgumentException("Cannot create enum from "

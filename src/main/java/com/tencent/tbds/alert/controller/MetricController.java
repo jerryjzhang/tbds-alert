@@ -1,5 +1,6 @@
 package com.tencent.tbds.alert.controller;
 
+import com.tencent.tbds.alert.domain.Metric;
 import com.tencent.tbds.alert.dto.GetMetricAppIdsResult;
 import com.tencent.tbds.alert.dto.GetMetricsResult;
 import com.tencent.tbds.alert.service.MetricService;
@@ -20,21 +21,27 @@ public class MetricController {
     private MetricService metricService;
 
     @RequestMapping(value="/appids", method= RequestMethod.GET)
-    @ApiOperation(value = "获取所有的指标类别", notes = "get all metric categories")
-    public GetMetricAppIdsResult getMetricAppIds(){
+    @ApiOperation(value = "获取所有的指标类别", notes = "get all metric categories", response = GetMetricAppIdsResult.class)
+    public Object getMetricAppIds(){
         return new GetMetricAppIdsResult(metricService.getMetricAppIds());
     }
 
     @RequestMapping(value="/{appid}", method= RequestMethod.GET)
-    @ApiOperation(value = "获取指定类别下的所有指标", notes = "get all metrics of given category")
-    public GetMetricsResult getMetrcsByAppid(@PathVariable String appid){
+    @ApiOperation(value = "获取指定类别下的所有指标", notes = "get all metrics of given category", response = GetMetricsResult.class)
+    public Object getMetrcsByAppid(@PathVariable String appid){
         return new GetMetricsResult(metricService.getMetricByAppId(appid));
     }
 
     @RequestMapping(method=RequestMethod.GET)
-    @ApiOperation(value = "获取所有指标", notes = "get all metrics")
-    public GetMetricsResult getMetrics(){
+    @ApiOperation(value = "获取所有指标", notes = "get all metrics", response = GetMetricsResult.class)
+    public Object getMetrics(){
         return new GetMetricsResult(metricService.getMetrics());
+    }
+
+    @RequestMapping(value="/{appid}/{metricName}",method=RequestMethod.GET)
+    @ApiOperation(value = "获取单个指标", notes = "get one metric", response = Metric.class)
+    public Object getMetric(@PathVariable String appId, @PathVariable String metricName){
+        return metricService.getMetric(appId, metricName);
     }
 
 }

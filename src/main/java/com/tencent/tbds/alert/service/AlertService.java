@@ -1,8 +1,11 @@
 package com.tencent.tbds.alert.service;
 
 import com.tencent.tbds.alert.dao.AlertRepository;
+import com.tencent.tbds.alert.dao.AlertTriggerRepository;
 import com.tencent.tbds.alert.domain.Alert;
+import com.tencent.tbds.alert.domain.Alert.AlertState;
 import com.tencent.tbds.alert.domain.Notification;
+import com.tencent.tbds.alert.domain.AlertTrigger;
 import com.tencent.tbds.alert.utils.AlertUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,6 +15,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+import java.util.List;
 import java.util.concurrent.*;
 
 /**
@@ -27,13 +31,22 @@ public class AlertService {
     @Autowired
     private MetricService metricService;
 
+    @Autowired
+    private AlertRepository alertRepository;
+    @Autowired
+    private AlertTriggerRepository alertTriggerRepository;
+
     @PostConstruct
     public void initialize(){
         scheduler = Executors.newScheduledThreadPool(20);
-    }
 
-    @Autowired
-    private AlertRepository alertRepository;
+        // schedule monitoring task for enabled alerts
+        List<Alert> alerts = alertRepository.findAll();
+        for(Alert alert : alerts){
+            if(!alert.isEnabled())continue;
+            scheduleAlertMonitoringTask(alert);
+        }
+    }
 
     public void saveAlert(Alert alert){
         for(Notification notif : alert.getNotifications()){
@@ -49,6 +62,11 @@ public class AlertService {
             }
         }
         alertRepository.save(alert);
+        if(!alert.isEnabled())return;
+        scheduleAlertMonitoringTask(alert);
+    }
+
+    private void scheduleAlertMonitoringTask(Alert alert){
         ScheduledFuture task = scheduler.scheduleAtFixedRate(
                 new AlertMonitorTask(alert), alert.getCondition().getPeriod(), alert.getCondition().getPeriod(), TimeUnit.MINUTES);
         scheduledTasks.put(alert.getId(), task);
@@ -75,6 +93,12 @@ public class AlertService {
         }
 
         public void run(){
+            // check if lastTriggerTime from now is less than the given interval
+            if(alert.getLastTriggerTime() != null &&
+                    (AlertUtils.now().getTime() - alert.getLastTriggerTime().getTime()) * 1.2
+                    < alert.getInterval() * 60 * 1000)return;
+
+            // check if metric value is reaching the threshold
             double value = metricService.getMetricValue(alert.getCondition().getAppId(), alert.getCondition().getMetricName(),
                     alert.getCondition().getPeriod(), alert.getCondition().getStatistic());
             boolean reachThreshold = false;
@@ -97,7 +121,26 @@ public class AlertService {
             }
 
             if(reachThreshold){
-                System.out.println("Junz Notified");
+                alert.setLastTriggerTime(AlertUtils.now());
+                alert.setState(AlertState.Abnormal);
+                alertRepository.save(alert);
+
+                String cause = String.format("%s:%s %s:%dmin %.1f %s threshold:%.1f",
+                        alert.getCondition().getAppId(), alert.getCondition().getMetricName(),
+                        alert.getCondition().getStatistic(), alert.getCondition().getPeriod(),
+                        value, alert.getCondition().getRelation(), alert.getCondition().getThreshold());
+                AlertTrigger trigger = new AlertTrigger(alert.getId(), alert.getCondition().getAppId(),
+                        alert.getCondition().getMetricName(), AlertUtils.now(), cause);
+                alertTriggerRepository.save(trigger);
+
+                LOG.info("Alert {} is triggered due to '{}'", alert.getId(), cause);
+
+                for (Notification notif : alert.getNotifications()) {
+                    LOG.info("Pushed notification {}", notif);
+                }
+            }else{
+                alert.setState(AlertState.Normal);
+                alertRepository.save(alert);
             }
         }
     }

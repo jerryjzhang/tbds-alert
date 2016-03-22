@@ -4,14 +4,14 @@ import io.swagger.annotations.ApiModelProperty;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
-import java.security.Timestamp;
+import java.sql.Timestamp;
 
 /**
  * Created by jerryjzhang on 2016/3/17.
  */
 @Entity
-@Table(name = "trigger_history")
-public class TriggerHistory {
+@Table(name = "alert_trigger")
+public class AlertTrigger {
     @Id
     @Column(length = 36)
     @GenericGenerator(name = "system-uuid", strategy = "uuid2")
@@ -32,6 +32,19 @@ public class TriggerHistory {
 
     @ApiModelProperty(notes = "告警触发的原因")
     private String cause;
+
+    @ApiModelProperty(notes = "告警通知是否已读")
+    private boolean read;
+
+    public AlertTrigger(){}
+
+    public AlertTrigger(String alertId, String appId, String metricName, Timestamp time, String cause) {
+        this.alertId = alertId;
+        this.appId = appId;
+        this.metricName = metricName;
+        this.time = time;
+        this.cause = cause;
+    }
 
     public String getAlertId() {
         return alertId;
@@ -79,5 +92,13 @@ public class TriggerHistory {
 
     public void setCause(String cause) {
         this.cause = cause;
+    }
+
+    public boolean isRead() {
+        return read;
+    }
+
+    public void setRead(boolean read) {
+        this.read = read;
     }
 }
