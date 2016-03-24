@@ -5,13 +5,12 @@ import io.swagger.annotations.ApiModelProperty;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
-import java.util.List;
 
 /**
  * Created by jerryjzhang on 2016/3/16.
  */
 @Entity
-@Table(name = "condition")
+@Table(name = "alert_condition")
 public class Condition {
     @Id
     @Column(length = 36)
@@ -30,7 +29,7 @@ public class Condition {
     @JsonIgnore
     private Alert alert;
 
-    @Column(length = 5)
+    @Column(name = "frelation",length = 5)
     @ApiModelProperty(notes = "告警阈值与指标值的比较关系")
     private ConditionRelation relation;
 
@@ -42,7 +41,7 @@ public class Condition {
 
     @Column(length = 20)
     @ApiModelProperty(notes = "告警指标值统计类型")
-    private Statistic statistic = Statistic.Maximum;
+    private Statistic statistic = Statistic.Max;
 
     public String getId() {
         return id;

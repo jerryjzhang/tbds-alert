@@ -1,15 +1,16 @@
 package com.tencent.tbds.alert.domain;
 
 /**
- * Created by jerryjzhang on 2016/3/22.
+ * Created by jerryjzhang on 2016/3/24.
  */
-public class AlertTriggerQueryCriteria {
+public class AlertQueryCriteria {
     private String metricName;
     private String appId;
     private Long startTime;
     private Long endTime;
-    private String read;
+    private String enabled;
     private String keyword;
+    private String state;
 
     public String getMetricName() {
         return metricName;
@@ -43,12 +44,12 @@ public class AlertTriggerQueryCriteria {
         this.endTime = endTime;
     }
 
-    public String isRead() {
-        return read;
+    public String getEnabled() {
+        return enabled;
     }
 
-    public void setRead(String read) {
-        this.read = read;
+    public void setEnabled(String enabled) {
+        this.enabled = enabled;
     }
 
     public String getKeyword() {
@@ -57,5 +58,13 @@ public class AlertTriggerQueryCriteria {
 
     public void setKeyword(String keyword) {
         this.keyword = keyword;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
     }
 }

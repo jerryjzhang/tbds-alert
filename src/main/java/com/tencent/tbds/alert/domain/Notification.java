@@ -6,12 +6,13 @@ import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.List;
 
 /**
  * Created by jerryjzhang on 2016/3/15.
  */
 @Entity
-@Table(name = "notification")
+@Table(name = "alert_notification")
 public class Notification {
     public enum NotificationType {
         PORTAL,
@@ -36,6 +37,10 @@ public class Notification {
     @Column(length = 10)
     @ApiModelProperty(notes = "通知推送渠道")
     private NotificationType type = NotificationType.PORTAL;
+
+    @ElementCollection
+    @ApiModelProperty(notes = "通知推送接收者")
+    private List<String> recipients;
 
     @ApiModelProperty(dataType = "java.lang.Long", notes = "上次通知推送时间")
     private Timestamp lastPushTime;
@@ -62,6 +67,14 @@ public class Notification {
 
     public void setType(NotificationType type) {
         this.type = type;
+    }
+
+    public List<String> getRecipients() {
+        return recipients;
+    }
+
+    public void setRecipients(List<String> recipients) {
+        this.recipients = recipients;
     }
 
     public Timestamp getLastPushTime() {

@@ -2,10 +2,12 @@ package com.tencent.tbds.alert.service;
 
 import com.tencent.tbds.alert.dao.AlertRepository;
 import com.tencent.tbds.alert.dao.AlertTriggerRepository;
-import com.tencent.tbds.alert.domain.Alert;
+import com.tencent.tbds.alert.dao.CustomerSpecifications;
+import com.tencent.tbds.alert.domain.*;
 import com.tencent.tbds.alert.domain.Alert.AlertState;
-import com.tencent.tbds.alert.domain.Notification;
-import com.tencent.tbds.alert.domain.AlertTrigger;
+import com.tencent.tbds.alert.dto.ResponseStatus;
+import com.tencent.tbds.alert.exception.TBDSAlertException;
+import com.tencent.tbds.alert.notification.NotificationPlugin;
 import com.tencent.tbds.alert.utils.AlertUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,7 +17,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.*;
 
 /**
@@ -35,6 +39,8 @@ public class AlertService {
     private AlertRepository alertRepository;
     @Autowired
     private AlertTriggerRepository alertTriggerRepository;
+    @Autowired
+    private Map<String, NotificationPlugin> notificationPlugins = new HashMap<>();
 
     @PostConstruct
     public void initialize(){
@@ -77,11 +83,25 @@ public class AlertService {
         return alertRepository.findAll(pageable);
     }
 
+    public Page<Alert> getAlerts(AlertQueryCriteria criteria,Pageable pageable){
+        return alertRepository.findAll(CustomerSpecifications.AlertQuery(criteria), pageable);
+    }
+
     public Alert getAlert(String alertId){
-        return alertRepository.findOne(alertId);
+        Alert alert = alertRepository.findOne(alertId);
+        if(alert == null){
+            throw new TBDSAlertException(ResponseStatus.NOT_FOUND.getCode(), "Alert Object Not Found");
+        }
+
+        return alert;
     }
 
     public void deleteAlert(String alertId){
+        Alert alert = alertRepository.findOne(alertId);
+        if(alert == null){
+            throw new TBDSAlertException(ResponseStatus.NOT_FOUND.getCode(), "Alert Object Not Found");
+        }
+
         alertRepository.delete(alertId);
     }
 
@@ -136,6 +156,8 @@ public class AlertService {
                 LOG.info("Alert {} is triggered due to '{}'", alert.getId(), cause);
 
                 for (Notification notif : alert.getNotifications()) {
+                    NotificationPlugin plugin = notificationPlugins.get(notif.getType().toString());
+                    plugin.onAlert(new NotificationContext(alert, notif, trigger));
                     LOG.info("Pushed notification {}", notif);
                 }
             }else{

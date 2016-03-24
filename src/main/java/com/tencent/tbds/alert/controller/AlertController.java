@@ -1,6 +1,7 @@
 package com.tencent.tbds.alert.controller;
 
 import com.tencent.tbds.alert.domain.Alert;
+import com.tencent.tbds.alert.domain.AlertQueryCriteria;
 import com.tencent.tbds.alert.dto.GetAlertsResult;
 import com.tencent.tbds.alert.dto.GetTriggerHistoryResult;
 import com.tencent.tbds.alert.service.AlertService;
@@ -30,11 +31,26 @@ public class AlertController {
     @RequestMapping(method= RequestMethod.GET)
     @ApiOperation(value = "获取所有的告警，有分页机制", notes = "get all alerts", response = GetAlertsResult.class)
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "pageSize", value = "每页的大小", paramType = "query", dataType = "int"),
-            @ApiImplicitParam(name = "pageNumber", value = "第几页", paramType = "query", dataType = "int"),
+            @ApiImplicitParam(name = "size", value = "每页的大小", paramType = "query", dataType = "int"),
+            @ApiImplicitParam(name = "page", value = "第几页", paramType = "query", dataType = "int"),
     })
     public Object getAlerts(Pageable pageable){
         return new GetAlertsResult(alertService.getAlerts(pageable));
+    }
+
+    @RequestMapping(value = "/query", method= RequestMethod.GET)
+    @ApiOperation(value = "获取所有的告警，有分页机制", notes = "get all alerts", response = GetAlertsResult.class)
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "appId", value = "指标类别", paramType = "query", dataType = "string"),
+            @ApiImplicitParam(name = "metricName", value = "指标名称", paramType = "query", dataType = "string"),
+            @ApiImplicitParam(name = "startTime", value = "最后修改起始时间", paramType = "query", dataType = "long"),
+            @ApiImplicitParam(name = "endTime", value = "最后修改结束时间", paramType = "query", dataType = "long"),
+            @ApiImplicitParam(name = "keyword", value = "关键字查询，告警名称/指标名称", paramType = "query", dataType = "string"),
+            @ApiImplicitParam(name = "size", value = "每页的大小", paramType = "query", dataType = "int"),
+            @ApiImplicitParam(name = "page", value = "第几页", paramType = "query", dataType = "int"),
+    })
+    public Object queryAlerts(AlertQueryCriteria criteria, Pageable pageable){
+        return new GetAlertsResult(alertService.getAlerts(criteria, pageable));
     }
 
     @RequestMapping(value="/{alertId}", method= RequestMethod.GET)
@@ -45,9 +61,8 @@ public class AlertController {
 
     @RequestMapping(value="/{alertId}", method= RequestMethod.DELETE)
     @ApiOperation(value = "根据ID删除告警", notes = "delete an alert by id")
-    public void deleteAlert(@PathVariable String alertId){
+    public Object deleteAlert(@PathVariable String alertId){
         alertService.deleteAlert(alertId);
+        return true;
     }
-
-
 }

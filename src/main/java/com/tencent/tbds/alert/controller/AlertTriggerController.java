@@ -31,8 +31,8 @@ public class AlertTriggerController {
             @ApiImplicitParam(name = "endTime", value = "结束时间", paramType = "query", dataType = "long"),
             @ApiImplicitParam(name = "read", value = "是否已读, true/false", paramType = "query", dataType = "string"),
             @ApiImplicitParam(name = "keyword", value = "关键字查询，指标类别/指标名称", paramType = "query", dataType = "string"),
-            @ApiImplicitParam(name = "pageSize", value = "每页的大小", paramType = "query", dataType = "int"),
-            @ApiImplicitParam(name = "pageNumber", value = "第几页", paramType = "query", dataType = "int"),
+            @ApiImplicitParam(name = "size", value = "每页的大小", paramType = "query", dataType = "int"),
+            @ApiImplicitParam(name = "page", value = "第几页", paramType = "query", dataType = "int"),
     })
     public Object getTriggers(AlertTriggerQueryCriteria criteria, Pageable pageable){
         return new GetTriggerHistoryResult(alertTriggerService.getTriggerHistory(criteria, pageable));

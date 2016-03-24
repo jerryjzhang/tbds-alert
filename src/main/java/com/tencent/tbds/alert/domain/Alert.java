@@ -25,11 +25,12 @@ public class Alert {
     private String name;
 
     @ApiModelProperty(notes = "告警描述")
+    @Column(name = "fdesc")
     private String desc;
 
     @ApiModelProperty(notes = "告警最后修改人", required = true)
     private String lastUpdateBy;
-
+    @Column(name = "finterval")
     @ApiModelProperty(notes = "告警频率/间隔", required = true)
     private int interval;
 

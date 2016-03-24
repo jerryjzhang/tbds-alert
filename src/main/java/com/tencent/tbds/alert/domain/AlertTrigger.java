@@ -28,12 +28,15 @@ public class AlertTrigger {
     private String metricName;
 
     @ApiModelProperty(dataType = "java.lang.Long", notes = "告警触发时间")
+    @Column(name = "ftime")
     private Timestamp time;
 
     @ApiModelProperty(notes = "告警触发的原因")
+    @Column(name = "fcause")
     private String cause;
 
     @ApiModelProperty(notes = "告警通知是否已读")
+    @Column(name = "fread")
     private boolean read;
 
     public AlertTrigger(){}
